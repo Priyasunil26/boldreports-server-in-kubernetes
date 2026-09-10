@@ -2,9 +2,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 namespace: bold-services
-appBaseUrl: ''
+appBaseUrl: 'https://playwright.boldbidemo.com'
 optionalLibs: ''
-clusterProvider: ''
+clusterProvider: 'aks'
 
 persistentVolume:
   # persistent volumes were global resources. 
@@ -83,7 +83,7 @@ imagePullSecrets: []
 
 
 loadBalancer:
-  type: nginx
+  type: alb
   # ingressClassName: nginx
   # gatewayName: 
   # gatewayNamespace: 
@@ -109,7 +109,7 @@ loadBalancer:
         # secretName: bold-tls
         
 subApplication:
-  enabled: false
+  enabled: true
   # Specify the subpath. The default subpath value is 'boldservices'
   subPath: ''
 
@@ -275,13 +275,13 @@ licenseKeyDetails:
 ## Bold BI Upgrade Center Configuration
 upgradeCenter:
   # Set this to true to deploy the Bold BI Upgrade Center service. Set it to false to skip Upgrade Center resources.
-  enabled: false
+  enabled: true
   # Root User administrator credentials used by Upgrade Center validation jobs.
   # 
   # Credentials provided under rootUserDetails take priority. These values are used only when rootUserDetails is empty.
   secret:
-    adminUsername: ""
-    adminPassword: ""
+    adminUsername: "Admin"
+    adminPassword: "Admin@123"
 
   # Upgrade Center web application image.
   image:
