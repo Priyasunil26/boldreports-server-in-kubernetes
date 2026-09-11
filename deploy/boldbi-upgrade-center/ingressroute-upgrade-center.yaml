@@ -9,18 +9,18 @@ spec:
     replacement: ${1}/
     permanent: true
 ---
-# Add this route to the existing Bold BI IngressRoute before the catch-all PathPrefix(`/`) route.
+# Add this route to the existing Bold Reports IngressRoute before the catch-all PathPrefix(`/`) route.
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: boldreports-upgrade-center-route-template
+  name: boldreports-upgrade-center-route
   namespace: bold-services
 spec:
   entryPoints:
     - websecure
   routes:
     - kind: Rule
-    # Update the host value with the actual domain name used for the Bold BI deployment
+    # Update the host value with the actual domain name used for the Bold Reports deployment
       match: Host(`example.com`) && PathPrefix(`/upgrade-center`)
       middlewares:
         - name: body-limit-200m
