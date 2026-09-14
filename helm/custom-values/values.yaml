@@ -171,7 +171,7 @@ upgradeCenter:
 
   # Upgrade Center web application image.
   image:
-    repo: syncfusion/boldbi-upgrade-center
+    repo: syncfusion/boldreports-upgrade-center
     tag: v1.0
     pullPolicy: Always
 

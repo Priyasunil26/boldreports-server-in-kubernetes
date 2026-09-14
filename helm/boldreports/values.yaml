@@ -275,13 +275,13 @@ licenseKeyDetails:
 ## Bold Reports Upgrade Center Configuration
 upgradeCenter:
   # Set this to true to deploy the Bold Reports Upgrade Center service. Set it to false to skip Upgrade Center resources.
-  enabled: true
+  enabled: false
   # Root User administrator credentials used by Upgrade Center validation jobs.
   # 
   # Credentials provided under rootUserDetails take priority. These values are used only when rootUserDetails is empty.
   secret:
-    adminUsername: "Admin"
-    adminPassword: "Admin@123"
+    adminUsername: ""
+    adminPassword: ""
 
   # Upgrade Center web application image.
   image:
