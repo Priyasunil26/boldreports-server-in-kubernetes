@@ -158,9 +158,9 @@ autoscaling:
     percentValue: 10
     percentPeriodSeconds: 60
 
-## Bold BI Upgrade Center Configuration
+## Bold Reports Upgrade Center Configuration
 upgradeCenter:
-  # Set this to true to deploy the Bold BI Upgrade Center service. Set it to false to skip Upgrade Center resources.
+  # Set this to true to deploy the Bold Reports Upgrade Center service. Set it to false to skip Upgrade Center resources.
   enabled: false
   # Root User administrator credentials used by Upgrade Center validation jobs.
   # 

@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 namespace: bold-services
-appBaseUrl: 'https://playwright.boldbidemo.com'
+appBaseUrl: ''
 optionalLibs: ''
 clusterProvider: 'aks'
 
@@ -21,11 +21,11 @@ persistentVolume:
     serverName: ''
     filePath: ''
   aks:
-    fileShareName: ''
-    # base64 string
-    azureStorageAccountName: ''
-    # base64 string
-    azureStorageAccountKey: ''
+    # fileShareName: ''
+    # # base64 string
+    # azureStorageAccountName: ''
+    # # base64 string
+    # azureStorageAccountKey: ''
     nfs:
       # fileshare name as 'storageaccountname/filesharename' Ex:premiumstorage1234/boldreports.
       fileShareName: ''
@@ -83,7 +83,7 @@ imagePullSecrets: []
 
 
 loadBalancer:
-  type: alb
+  type: traefik
   # ingressClassName: nginx
   # gatewayName: 
   # gatewayNamespace: 
@@ -109,7 +109,7 @@ loadBalancer:
         # secretName: bold-tls
         
 subApplication:
-  enabled: true
+  enabled: false
   # Specify the subpath. The default subpath value is 'boldservices'
   subPath: ''
 
@@ -205,7 +205,7 @@ databaseServerDetails:
   # Set this to true if you have existing details in your cluster.
   existingSecret: false
 
-  # Type of database server can be used for configuring the Bold BI. Eg: mssql, mysql and postgresql
+  # Type of database server can be used for configuring the Bold Reports. Eg: mssql, mysql and postgresql
   dbType: ""
 
   # Name of the Database Server
@@ -272,9 +272,9 @@ licenseKeyDetails:
   # The Bold Reports licnece key which you have purchesed.
   licenseKey: ""
 
-## Bold BI Upgrade Center Configuration
+## Bold Reports Upgrade Center Configuration
 upgradeCenter:
-  # Set this to true to deploy the Bold BI Upgrade Center service. Set it to false to skip Upgrade Center resources.
+  # Set this to true to deploy the Bold Reports Upgrade Center service. Set it to false to skip Upgrade Center resources.
   enabled: true
   # Root User administrator credentials used by Upgrade Center validation jobs.
   # 
@@ -285,8 +285,8 @@ upgradeCenter:
 
   # Upgrade Center web application image.
   image:
-    repo: syncfusion/boldbi-upgrade-center
-    tag: v1.0
+    repo: sivakumar2809/boldreports-upgrade-center
+    tag: v3.0
     pullPolicy: Always
 
   # CPU and memory requests/limits for the Upgrade Center web application pod.
