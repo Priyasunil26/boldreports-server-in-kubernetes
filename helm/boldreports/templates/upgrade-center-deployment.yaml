@@ -142,13 +142,11 @@ data:
   ums: "http://id-ums-service:6002/ums"
 
   allowedForwardedPrefix0: "/upgrade-center"
-  allowedForwardedPrefix1: "/platform"
-  allowedForwardedPrefix2: "/platform/upgrade-center"
 
   playwrightRunnerImage: "sivakumar2809/boldreports-upgrade-center-qa:v2.1"
 
   playwrightJobTimeoutSeconds: "9000"
-  playwrightCleanupJobTimeoutSeconds: "3600"
+  playwrightCleanupJobTimeoutSeconds: "900"
   playwrightCompletedJobTtlSeconds: "3600"
 
   playwrightWorkers: "4"
@@ -167,7 +165,7 @@ data:
   playwrightSharedStateFsGroup: "1001"
 
   playwrightPodHoldSeconds: "180"
-  playwrightPassRateThreshold: "40"
+  playwrightPassRateThreshold: "90"
 
   playwrightReportUploadBaseUrl: "http://boldreports-upgrade-center/upgrade-center/api/playwright-reports"
   playwrightResultUploadBaseUrl: "http://boldreports-upgrade-center/upgrade-center/api/playwright-results"
@@ -181,11 +179,11 @@ data:
   kubernetesAllowSkipTlsVerifyForLocalDevelopment: "false"
   kubernetesCertificateAuthorityPath: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
 
-  allowedImageRepository0: "us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi"
-  allowedImageRegistryHost0: "us-central1-docker.pkg.dev"
+  allowedImageRepository0: "us-docker.pkg.dev/boldreports/multi-container"
+  allowedImageRegistryHost0: "us-docker.pkg.dev"
 
-  allowedImageRepository1: "us-docker.pkg.dev/boldreports/multi-container"
-  allowedImageRegistryHost1: "us-docker.pkg.dev"
+  allowedImageRepository1: "us-central1-docker.pkg.dev/boldreports-dev/boldreports-dev-images"
+  allowedImageRegistryHost1: "us-central1-docker.pkg.dev"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -306,19 +304,6 @@ spec:
                 configMapKeyRef:
                   name: boldreports-upgrade-center-config
                   key: allowedForwardedPrefix0
-
-            - name: UpgradeCenter__Authentication__AllowedForwardedPrefixes__1
-              valueFrom:
-                configMapKeyRef:
-                  name: boldreports-upgrade-center-config
-                  key: allowedForwardedPrefix1
-
-            - name: UpgradeCenter__Authentication__AllowedForwardedPrefixes__2
-              valueFrom:
-                configMapKeyRef:
-                  name: boldreports-upgrade-center-config
-                  key: allowedForwardedPrefix2
-
             - name: UpgradeCenter__Playwright__RunnerImage
               valueFrom:
                 configMapKeyRef:

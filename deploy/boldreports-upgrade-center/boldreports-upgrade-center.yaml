@@ -84,10 +84,8 @@ data:
   idpApi: "http://id-api-service:6001/api"
   ums: "http://id-ums-service:6002/ums"
   allowedForwardedPrefix0: "/upgrade-center"
-  allowedForwardedPrefix1: "/platform"
-  allowedForwardedPrefix2: "/platform/upgrade-center"
-  playwrightRunnerImage: "sivakumar2809/boldreports-upgrade-center-qa:v2.1"
   playwrightJobTimeoutSeconds: "9000"
+  playwrightCleanupJobTimeoutSeconds: "900"
   playwrightCompletedJobTtlSeconds: "3600"
   playwrightWorkers: "4"
   playwrightJobCpuRequest: "2"
@@ -101,7 +99,7 @@ data:
   playwrightSharedStateMountPath: "/app/playwright-shared-state"
   playwrightSharedStateFsGroup: "1001"
   playwrightPodHoldSeconds: "180"
-  playwrightPassRateThreshold: "40"
+  playwrightPassRateThreshold: "90"
   playwrightReportUploadBaseUrl: "http://boldreports-upgrade-center/upgrade-center/api/playwright-reports"
   playwrightResultUploadBaseUrl: "http://boldreports-upgrade-center/upgrade-center/api/playwright-results"
   productHealthCheckEnabled: "true"
@@ -111,8 +109,10 @@ data:
   kubernetesSkipTlsVerify: "false"
   kubernetesAllowSkipTlsVerifyForLocalDevelopment: "false"
   kubernetesCertificateAuthorityPath: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-  allowedImageRepository0: "us-central1-docker.pkg.dev/boldbi-dev-296107/boldbi"
-  allowedImageRegistryHost0: "us-central1-docker.pkg.dev"
+  allowedImageRepository0: "us-docker.pkg.dev/boldreports/multi-container"
+  allowedImageRepository1: "us-central1-docker.pkg.dev/boldreports-dev/boldreports-dev-images"
+  allowedImageRegistryHost0: "us-docker.pkg.dev"
+  allowedImageRegistryHost1: "us-central1-docker.pkg.dev"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -137,7 +137,7 @@ spec:
       automountServiceAccountToken: true
       initContainers:
         - name: wait-for-idp-configuration
-          image: curlimages/curl:8.10.1
+          image: docker.io/curlimages/curl:8.10.1
           imagePullPolicy: IfNotPresent
           env:
             - name: IDP_API_URL
@@ -153,10 +153,13 @@ spec:
               set -eu
 
               configuration_url="${IDP_API_URL%/}/configuration"
-              attempt=1
+              timeout_seconds=180
+              poll_interval_seconds=30
+              start_time="$(date +%s)"
 
-              while [ "$attempt" -le 10 ]; do
-                echo "Checking IDP configuration endpoint. Attempt ${attempt}/3."
+              while true; do
+                elapsed_seconds=$(($(date +%s) - start_time))
+                echo "Checking IDP configuration endpoint. Elapsed ${elapsed_seconds}/${timeout_seconds} seconds."
                 response_file="$(mktemp)"
                 status_code="$(curl -sS -o "$response_file" -w "%{http_code}" --connect-timeout 5 --max-time 10 "$configuration_url" || true)"
                 response_bytes="$(wc -c < "$response_file" | tr -d ' ')"
@@ -167,17 +170,25 @@ spec:
                   exit 0
                 fi
 
-                echo "IDP configuration endpoint is not ready. Status: ${status_code:-request_failed}. ResponseBytes: ${response_bytes}. Waiting 10 seconds before retry."
+                echo "IDP configuration endpoint is not ready. Status: ${status_code:-request_failed}. ResponseBytes: ${response_bytes}."
                 rm -f "$response_file"
 
-                if [ "$attempt" -lt 3 ]; then
-                  sleep 10
+                elapsed_seconds=$(($(date +%s) - start_time))
+                if [ "$elapsed_seconds" -ge "$timeout_seconds" ]; then
+                  break
                 fi
 
-                attempt=$((attempt + 1))
+                remaining_seconds=$((timeout_seconds - elapsed_seconds))
+                sleep_seconds="$poll_interval_seconds"
+                if [ "$remaining_seconds" -lt "$poll_interval_seconds" ]; then
+                  sleep_seconds="$remaining_seconds"
+                fi
+
+                echo "Waiting ${sleep_seconds} seconds before retry."
+                sleep "$sleep_seconds"
               done
 
-              echo "IDP configuration endpoint did not return a usable response after 3 attempts."
+              echo "IDP configuration endpoint did not return a usable response within ${timeout_seconds} seconds."
               exit 1
       containers:
         - name: boldreports-upgrade-center
@@ -219,28 +230,18 @@ spec:
                 configMapKeyRef:
                   name: boldreports-upgrade-center-config
                   key: allowedForwardedPrefix0
-            - name: UpgradeCenter__Authentication__AllowedForwardedPrefixes__1
-              valueFrom:
-                configMapKeyRef:
-                  name: boldreports-upgrade-center-config
-                  key: allowedForwardedPrefix1
-            - name: UpgradeCenter__Authentication__AllowedForwardedPrefixes__2
-              valueFrom:
-                configMapKeyRef:
-                  name: boldreports-upgrade-center-config
-                  key: allowedForwardedPrefix2
             - name: UpgradeCenter__Playwright__UseKubernetesJob
               value: "true"
-            - name: UpgradeCenter__Playwright__RunnerImage
-              valueFrom:
-                configMapKeyRef:
-                  name: boldreports-upgrade-center-config
-                  key: playwrightRunnerImage
             - name: UpgradeCenter__Playwright__JobTimeoutSeconds
               valueFrom:
                 configMapKeyRef:
                   name: boldreports-upgrade-center-config
                   key: playwrightJobTimeoutSeconds
+            - name: UpgradeCenter__Playwright__CleanupJobTimeoutSeconds
+              valueFrom:
+                configMapKeyRef:
+                  name: boldreports-upgrade-center-config
+                  key: playwrightCleanupJobTimeoutSeconds
             - name: UpgradeCenter__Playwright__CompletedJobTtlSeconds
               valueFrom:
                 configMapKeyRef:
@@ -361,11 +362,21 @@ spec:
                 configMapKeyRef:
                   name: boldreports-upgrade-center-config
                   key: allowedImageRepository0
+            - name: UpgradeCenter__Kubernetes__AllowedImageRepositories__1
+              valueFrom:
+                configMapKeyRef:
+                  name: boldreports-upgrade-center-config
+                  key: allowedImageRepository1
             - name: UpgradeCenter__Kubernetes__AllowedImageRegistryHosts__0
               valueFrom:
                 configMapKeyRef:
                   name: boldreports-upgrade-center-config
                   key: allowedImageRegistryHost0
+            - name: UpgradeCenter__Kubernetes__AllowedImageRegistryHosts__1
+              valueFrom:
+                configMapKeyRef:
+                  name: boldreports-upgrade-center-config
+                  key: allowedImageRegistryHost1
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
