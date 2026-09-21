@@ -583,7 +583,7 @@ metadata:
 
       #     set $proxy_upstream_name "${boldreports_namespace}-boldreports-upgrade-center-80";
 
-      #     rewrite "(?i)/upgrade-center(/|$)(.*)" /$2 break;
+      #     rewrite "(?i)^/upgrade-center(/|$)(.*)" /upgrade-center$1$2 break;
       #     proxy_pass http://upstream_balancer;
       # }
 spec:
