@@ -212,11 +212,11 @@ Once all services are running and the ingress is active:
 
 3. You will see an option — **Check for Upgrades**. Click it to open the Upgrade Center.
 
-    ![Check-Updates](/docs/images/check-updates.png)
+    ![Check-Updates](/docs/images/check-for-updates.png)
 
 4. The Upgrade Center will display the currently installed version and any available upgrades. You can initiate an upgrade directly from this interface.
 
-    ![Upgrade](/docs/images/upgrade.png)
+    ![Upgrade](/docs/images/upgrade-details.png)
 
     ![confirm-upgrade](/docs/images/start-upgrade.png)
 
