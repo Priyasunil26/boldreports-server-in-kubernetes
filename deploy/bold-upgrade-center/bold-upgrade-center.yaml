@@ -193,7 +193,7 @@ spec:
               exit 1
       containers:
         - name: bold-upgrade-center
-          image: docker.io/sivakumar2809/bold-common-uc:v3.0.0
+          image: bold-upgrade-center-dev:v3.0.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
