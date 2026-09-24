@@ -83,19 +83,19 @@ rules:
             port:
               number: 6002
       # Upgrade Center: Uncomment the following two paths to enable the Upgrade Center.
-      # Prerequisite: deploy the Upgrade Center manifests from deploy/boldreports-upgrade-center/
+      # Prerequisite: deploy the Upgrade Center manifests from deploy/bold-upgrade-center/
       # - path: "/upgrade-center"
       #   pathType: ImplementationSpecific
       #   backend:
       #     service:
-      #       name: boldreports-upgrade-center
+      #       name: bold-upgrade-center
       #       port:
       #         number: 80
       # - path: "/upgrade-center/*"
       #   pathType: ImplementationSpecific
       #   backend:
       #     service:
-      #       name: boldreports-upgrade-center
+      #       name: bold-upgrade-center
       #       port:
       #         number: 80
       - path: "/*"

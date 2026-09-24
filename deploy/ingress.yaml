@@ -562,7 +562,7 @@ metadata:
       }
 
       # Upgrade Center: Uncomment the following location block to enable the Upgrade Center.
-      # Prerequisite: deploy the Upgrade Center manifests from deploy/boldreports-upgrade-center/
+      # Prerequisite: deploy the Upgrade Center manifests from deploy/bold-upgrade-center/
       # location ~* "^/upgrade-center(/|$)(.*)" {
       #     set $namespace      $boldreports_namespace;
       #     set $ingress_name   "boldreports-ingress";
@@ -581,7 +581,7 @@ metadata:
       #         plugins.run()
       #     }
 
-      #     set $proxy_upstream_name "${boldreports_namespace}-boldreports-upgrade-center-80";
+      #     set $proxy_upstream_name "${boldreports_namespace}-bold-upgrade-center-80";
 
       #     rewrite "(?i)^/upgrade-center(/|$)(.*)" /upgrade-center$1$2 break;
       #     proxy_pass http://upstream_balancer;
@@ -668,11 +668,11 @@ spec:
               number: 6009
 
       # Upgrade Center: Uncomment the following path to enable the Upgrade Center.
-      # Prerequisite: deploy the Upgrade Center manifests from deploy/boldreports-upgrade-center/
+      # Prerequisite: deploy the Upgrade Center manifests from deploy/bold-upgrade-center/
       # - path: /upgrade-center(/|$)(.*)
       #   pathType: Prefix
       #   backend:
       #     service:
-      #       name: boldreports-upgrade-center
+      #       name: bold-upgrade-center
       #       port:
       #         number: 80

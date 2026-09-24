@@ -55,14 +55,14 @@ metadata:
     app.kubernetes.io/version: {{ $.Chart.AppVersion | quote }}
     {{- end }}
     app.kubernetes.io/managed-by: {{ $.Release.Service }}
-  name: boldreports-upgrade-center-rule
+  name: bold-upgrade-center-rule
   {{- if eq $.Release.Namespace "default" }}
   namespace: {{ $.Values.namespace }}
   {{- else }}
   namespace: {{ $.Release.Namespace }}
   {{- end }}
 spec:
-  host: boldreports-upgrade-center
+  host: bold-upgrade-center
   trafficPolicy:
     loadBalancer:
       consistentHash:

@@ -107,14 +107,14 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: boldreports-upgrade-center
+            name: bold-upgrade-center
             port:
               number: 80
       - path: "/upgrade-center/*"
         pathType: ImplementationSpecific
         backend:
           service:
-            name: boldreports-upgrade-center
+            name: bold-upgrade-center
             port:
               number: 80
       {{- end }}

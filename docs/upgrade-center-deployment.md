@@ -2,6 +2,8 @@
 
 The **Upgrade Center** is an optional feature that enables in-application upgrade management for Bold Reports. Once deployed, it allows administrators to check for new releases and trigger upgrades directly from the Bold Reports administration panel — without manual intervention on the cluster.
 
+> **Note:** Bold Reports uses the shared Bold Upgrade Center application configured in `BoldReports` deployment mode. The Playwright validation image is resolved from the release information API and is not configured in the Helm values file.
+
 ## Sections
 
 - [Deploy Upgrade Center using kubectl](#deploy-upgrade-center-using-kubectl)
@@ -16,28 +18,28 @@ Download the following YAML files for Upgrade Center deployment:
 
 | File | Description |
 |------|-------------|
-| [`boldreports-upgrade-center.yaml`](https://raw.githubusercontent.com/boldreports/bold-reports-kubernetes/master/deploy/boldreports-upgrade-center/boldreports-upgrade-center.yaml) | ServiceAccount, RBAC Role/RoleBinding, ConfigMap, Deployment, and Service for the Upgrade Center |
-| [`boldreports-upgrade-center-playwright-secret.yaml`](https://raw.githubusercontent.com/boldreports/bold-reports-kubernetes/master/deploy/boldreports-upgrade-center/boldreports-upgrade-center-playwright-secret.yaml) | Secret containing the Bold Reports admin credentials used by the Playwright automation runner |
-| [`ingressroute-upgrade-center.yaml`](https://raw.githubusercontent.com/boldreports/bold-reports-kubernetes/master/deploy/boldreports-upgrade-center/ingressroute-upgrade-center.yaml) | Traefik Middleware and IngressRoute to expose the Upgrade Center endpoint |
+| [`bold-upgrade-center.yaml`](https://raw.githubusercontent.com/boldreports/bold-reports-kubernetes/master/deploy/bold-upgrade-center/bold-upgrade-center.yaml) | ServiceAccount, RBAC Role/RoleBinding, ConfigMap, Deployment, and Service for the Upgrade Center |
+| [`bold-upgrade-center-playwright-secret.yaml`](https://raw.githubusercontent.com/boldreports/bold-reports-kubernetes/master/deploy/bold-upgrade-center/bold-upgrade-center-playwright-secret.yaml) | Secret containing the Bold Reports admin credentials used by the Playwright automation runner |
+| [`ingressroute-upgrade-center.yaml`](https://raw.githubusercontent.com/boldreports/bold-reports-kubernetes/master/deploy/bold-upgrade-center/ingressroute-upgrade-center.yaml) | Traefik Middleware and IngressRoute to expose the Upgrade Center endpoint |
 
-> **Note:** The Upgrade Center Deployment mounts the same persistent volume claim used by Bold Reports (`bold-fileserver-claim`). If the volume claim in your cluster is named differently, update the `claimName` under `volumes` in `boldreports-upgrade-center.yaml` before applying it.
+> **Note:** The Upgrade Center Deployment mounts the same persistent volume claim used by Bold Reports (`bold-fileserver-claim`). If the volume claim in your cluster is named differently, update the `claimName` under `volumes` in `bold-upgrade-center.yaml` before applying it.
 
 ### Step 2 — Configure admin credentials
 
 > **RBAC scope:** The Upgrade Center RBAC is namespace-scoped. The manifest creates a `Role` and `RoleBinding` in the same namespace where Bold Reports is deployed, and it does not require cluster-wide `ClusterRole` access. Apply the manifest in the Bold Reports namespace so the Upgrade Center can manage only the Bold Reports resources in that namespace.
 
-Open `boldreports-upgrade-center-playwright-secret.yaml` and replace the placeholder values with your Bold Reports administrator credentials:
+Open `bold-upgrade-center-playwright-secret.yaml` and replace the placeholder values with your Bold Reports administrator credentials:
 
 ```yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: boldreports-upgrade-center-playwright
+  name: bold-upgrade-center-playwright
   namespace: bold-services
 type: Opaque
 stringData:
-  ADMIN_USERNAME: "<your-admin-email>"
-  ADMIN_PASSWORD: "<your-admin-password>"
+  BOLDREPORTS_ADMIN_USERNAME: "<your-admin-email>"
+  BOLDREPORTS_ADMIN_PASSWORD: "<your-admin-password>"
 ```
 
 > **Note:** These credentials must match the administrator account configured during Bold Reports' initial setup. The Playwright runner uses them to automate the upgrade workflow on your behalf.
@@ -60,18 +62,18 @@ tls:
   secretName: bold-tls   # Replace with your TLS secret name if different
 ```
 
-> **Note:** This manifest is specific to Traefik. If your Bold Reports deployment uses a different ingress (for example, nginx or Istio), expose the `boldreports-upgrade-center` service on the `/upgrade-center` path using your ingress configuration instead, and skip this file.
+> **Note:** This manifest is specific to Traefik. If your Bold Reports deployment uses a different ingress (for example, nginx or Istio), expose the `bold-upgrade-center` service on the `/upgrade-center` path using your ingress configuration instead, and skip this file.
 
 ### Step 4 — Apply the manifests
 
 Run the following commands in the namespace where Bold Reports is deployed (default: `bold-services`):
 
 ```sh
-kubectl apply -f boldreports-upgrade-center-playwright-secret.yaml
+kubectl apply -f bold-upgrade-center-playwright-secret.yaml
 ```
 
 ```sh
-kubectl apply -f boldreports-upgrade-center.yaml
+kubectl apply -f bold-upgrade-center.yaml
 ```
 
 ```sh
@@ -83,7 +85,7 @@ kubectl apply -f ingressroute-upgrade-center.yaml
 Confirm that the Upgrade Center pod is running:
 
 ```sh
-kubectl get pods -n bold-services -l app.kubernetes.io/name=boldreports-upgrade-center
+kubectl get pods -n bold-services -l app.kubernetes.io/name=bold-upgrade-center
 ```
 
 ### Step 6 — Access the Upgrade Center
@@ -182,20 +184,20 @@ helm upgrade --install boldreports boldreports/boldreports \
 Check that all Upgrade Center pods are running:
 
 ```sh
-kubectl get pods -n bold-services -l app.kubernetes.io/name=boldreports-upgrade-center
+kubectl get pods -n bold-services -l app.kubernetes.io/name=bold-upgrade-center
 ```
 
 You should see the pod in `Running` state:
 
 ```
 NAME                                         READY   STATUS    RESTARTS   AGE
-boldreports-upgrade-center-xxxxxxxxx-xxxxx   1/1     Running   0          1m
+bold-upgrade-center-xxxxxxxxx-xxxxx   1/1     Running   0          1m
 ```
 
 Verify the service is created:
 
 ```sh
-kubectl get svc boldreports-upgrade-center -n bold-services
+kubectl get svc bold-upgrade-center -n bold-services
 ```
 
 ## Access the Upgrade Center from Bold Reports

@@ -151,8 +151,8 @@ For Helm chart, you'll need to craft a `values.yaml`.
         upgradeCenter.enabled
       </td>
       <td>
-        Set to <code>true</code> to deploy and enable the Bold Reports Upgrade Center service. Default is <code>false</code>.<br /><br />
-        For full configuration options (credentials, resources, Playwright runner), refer to the <a href="../docs/upgrade-center-deployment.md#deploy-upgrade-center-using-helm">Upgrade Center configuration guide</a>.
+        Set to <code>true</code> to deploy and enable the Upgrade Center service for Bold Reports. Default is <code>false</code>.<br /><br />
+        For full configuration options (credentials, resources, and validation settings), refer to the <a href="../docs/upgrade-center-deployment.md#deploy-upgrade-center-using-helm">Upgrade Center configuration guide</a>.
       </td>
     </tr>
 </table>
@@ -256,7 +256,7 @@ _See [helm install](https://helm.sh/docs/helm/helm_install/) for command documen
 
 ## Environment variables for configuring Upgrade Center
 
-The following environment variables are used to configure the Bold Reports Upgrade Center. Set `upgradeCenter.enabled: true` to deploy the service. For full deployment steps and configuration details, refer to the [Upgrade Center configuration guide](../docs/upgrade-center-deployment.md#deploy-upgrade-center-using-helm).
+The following environment variables are used to configure the Upgrade Center service for Bold Reports. Set `upgradeCenter.enabled: true` to deploy the service. For full deployment steps and configuration details, refer to the [Upgrade Center configuration guide](../docs/upgrade-center-deployment.md#deploy-upgrade-center-using-helm).
 
 <table>
     <tr>
@@ -272,7 +272,7 @@ The following environment variables are used to configure the Bold Reports Upgra
        upgradeCenter.enabled
       </td>
       <td>
-       Set to <code>true</code> to deploy and enable the Bold Reports Upgrade Center service. Default is <code>false</code>.
+       Set to <code>true</code> to deploy and enable the Upgrade Center service for Bold Reports. Default is <code>false</code>.
       </td>
     </tr>
     <tr>

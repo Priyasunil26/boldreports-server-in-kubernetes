@@ -165,7 +165,7 @@ spec:
     - destination:
         port:
           number: 80
-        host: boldreports-upgrade-center
+        host: bold-upgrade-center
     retries:
       attempts: 3
       retryOn: gateway-error,connect-failure,refused-stream

@@ -272,9 +272,9 @@ licenseKeyDetails:
   # The Bold Reports licnece key which you have purchesed.
   licenseKey: ""
 
-## Bold Reports Upgrade Center Configuration
+## Upgrade Center Configuration for Bold Reports
 upgradeCenter:
-  # Set this to true to deploy the Bold Reports Upgrade Center service. Set it to false to skip Upgrade Center resources.
+  # Set this to true to deploy the Upgrade Center service for Bold Reports. Set it to false to skip Upgrade Center resources.
   enabled: false
   # Root User administrator credentials used by Upgrade Center validation jobs.
   # 
@@ -285,8 +285,8 @@ upgradeCenter:
 
   # Upgrade Center web application image.
   image:
-    repo: sivakumar2809/boldreports-upgrade-center
-    tag: v3.0
+    repo: docker.io/sivakumar2809/bold-common-uc
+    tag: v3.0.0
     pullPolicy: Always
 
   # CPU and memory requests/limits for the Upgrade Center web application pod.

@@ -594,7 +594,7 @@ metadata:
               plugins.run()
           }
 
-          set $proxy_upstream_name "${boldreports_namespace}-boldreports-upgrade-center-80";
+          set $proxy_upstream_name "${boldreports_namespace}-bold-upgrade-center-80";
 
           rewrite "(?i)^/upgrade-center(/|$)(.*)" /upgrade-center$1$2 break;
           proxy_pass http://upstream_balancer;
@@ -770,11 +770,11 @@ spec:
             backend:
               {{- if $ingressApiIsStable }}
               service:
-                name: boldreports-upgrade-center
+                name: bold-upgrade-center
                 port:
                   number: 80
               {{- else }}
-              serviceName: boldreports-upgrade-center
+              serviceName: bold-upgrade-center
               servicePort: 80
               {{- end }}
 {{- end }}
