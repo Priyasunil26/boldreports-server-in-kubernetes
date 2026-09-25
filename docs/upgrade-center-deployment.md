@@ -38,8 +38,8 @@ metadata:
   namespace: bold-services
 type: Opaque
 stringData:
-  BOLDREPORTS_ADMIN_USERNAME: "<your-admin-email>"
-  BOLDREPORTS_ADMIN_PASSWORD: "<your-admin-password>"
+  BOLD_ADMIN_USERNAME: "<your-admin-email>"
+  BOLD_ADMIN_PASSWORD: "<your-admin-password>"
 ```
 
 > **Note:** These credentials must match the administrator account configured during Bold Reports' initial setup. The Playwright runner uses them to automate the upgrade workflow on your behalf.
