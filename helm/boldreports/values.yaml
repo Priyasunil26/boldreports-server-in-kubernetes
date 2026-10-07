@@ -4,7 +4,7 @@
 namespace: bold-services
 appBaseUrl: ''
 optionalLibs: ''
-clusterProvider: 'aks'
+clusterProvider: ''
 
 persistentVolume:
   # persistent volumes were global resources. 
@@ -21,11 +21,11 @@ persistentVolume:
     serverName: ''
     filePath: ''
   aks:
-    # fileShareName: ''
-    # # base64 string
-    # azureStorageAccountName: ''
-    # # base64 string
-    # azureStorageAccountKey: ''
+    fileShareName: ''
+    # base64 string
+    azureStorageAccountName: ''
+    # base64 string
+    azureStorageAccountKey: ''
     nfs:
       # fileshare name as 'storageaccountname/filesharename' Ex:premiumstorage1234/boldreports.
       fileShareName: ''
@@ -83,7 +83,7 @@ imagePullSecrets: []
 
 
 loadBalancer:
-  type: traefik
+  type: nginx
   # ingressClassName: nginx
   # gatewayName: 
   # gatewayNamespace: 
