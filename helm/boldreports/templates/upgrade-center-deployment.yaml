@@ -163,7 +163,7 @@ data:
   playwrightSharedStateMountPath: "/app/playwright-shared-state"
   playwrightSharedStateFsGroup: "1001"
 
-  playwrightPodHoldSeconds: "180"
+  playwrightPodHoldSeconds: "10"
   reportsPlaywrightPassRateThreshold: "90"
 
   playwrightReportUploadBaseUrl: "http://bold-upgrade-center/upgrade-center/api/playwright-reports"
