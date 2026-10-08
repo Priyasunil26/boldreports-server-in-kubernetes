@@ -164,7 +164,7 @@ data:
   playwrightSharedStateFsGroup: "1001"
 
   playwrightPodHoldSeconds: "10"
-  reportsPlaywrightPassRateThreshold: "90"
+  reportsPlaywrightPassRateThreshold: "100"
 
   playwrightReportUploadBaseUrl: "http://bold-upgrade-center/upgrade-center/api/playwright-reports"
   playwrightResultUploadBaseUrl: "http://bold-upgrade-center/upgrade-center/api/playwright-results"
