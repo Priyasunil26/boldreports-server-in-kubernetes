@@ -61,6 +61,20 @@ rules:
             name: reports-jobs-service
             port:
               number: 6552
+      - path: "/reporting/ai/*"
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: reports-ai-service
+            port:
+              number: 6555
+      - path: "/reporting/mcp/*"
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: reports-mcp-service
+            port:
+              number: 6556
       - path: "/reporting/*"
         pathType: ImplementationSpecific
         backend:

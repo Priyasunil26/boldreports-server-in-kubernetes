@@ -92,6 +92,10 @@ spec:
         image: "{{ $.Values.image.reportsRepo }}/boldreports-viewer:{{ $.Values.image.reportsTag }}"
         {{- else if eq $service.app "bold-etl" }}
         image: "{{ $.Values.image.reportsRepo }}/bold-etl:{{ $.Values.image.reportsTag }}"
+        {{- else if eq $service.app "reports-ai" }}
+        image: "{{ $.Values.image.reportsRepo }}/boldreports-ai:{{ $.Values.image.reportsTag }}"
+        {{- else if eq $service.app "reports-mcp" }}
+        image: "{{ $.Values.image.reportsRepo }}/boldreports-mcp-server:{{ $.Values.image.reportsTag }}"
         {{- end }}
         imagePullPolicy: Always
         ports:
@@ -214,6 +218,10 @@ spec:
         - mountPath: /application/reporting/viewer/logs
         {{- else if eq $service.app "bold-etl" }}
         - mountPath: /application/etl/etlservice/logs/k8s
+        {{- else if eq $service.app "reports-ai" }}
+        - mountPath: /application/reporting/ai/logs
+        {{- else if eq $service.app "reports-mcp" }}
+        - mountPath: /application/reporting/mcp/logs
         {{- end }}
           name: log4net-config-volume
       volumes:

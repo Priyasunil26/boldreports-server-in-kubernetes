@@ -40,6 +40,28 @@ spec:
   http:
   - match:
     - uri:
+        prefix: /reporting/ai
+    route:
+    - destination:
+        port:
+          number: 6555
+        host: reports-ai-service.bold-services.svc.cluster.local
+    retries:
+      attempts: 3
+      retryOn: gateway-error,connect-failure,refused-stream
+  - match:
+    - uri:
+        prefix: /reporting/mcp
+    route:
+    - destination:
+        port:
+          number: 6556
+        host: reports-mcp-service.bold-services.svc.cluster.local
+    retries:
+      attempts: 3
+      retryOn: gateway-error,connect-failure,refused-stream
+  - match:
+    - uri:
         prefix: /reporting/reportservice
     route:
     - destination:

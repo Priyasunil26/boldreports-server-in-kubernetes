@@ -60,6 +60,20 @@ spec:
   - matches:
     - path:
         type: PathPrefix
+        value: /reporting/ai
+    backendRefs:
+    - name: reports-ai-service
+      port: 6555
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /reporting/mcp
+    backendRefs:
+    - name: reports-mcp-service
+      port: 6556
+  - matches:
+    - path:
+        type: PathPrefix
         value: /reporting
     backendRefs:
     - name: reports-web-service

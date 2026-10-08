@@ -36,6 +36,10 @@ spec:
     port: 6553
     {{- else if eq $service.app "reports-viewer" }}
     port: 6554
+    {{- else if eq $service.app "reports-ai" }}
+    port: 6555
+    {{- else if eq $service.app "reports-mcp" }}
+    port: 6556
     {{- else if eq $service.app "bold-etl" }}
     port: 6009
     {{- end }}

@@ -41,17 +41,17 @@ ociStorage:
   storageType: 4
 
 image:
-  idRepo: us-docker.pkg.dev/boldreports/multi-container
-  reportsRepo: us-docker.pkg.dev/boldreports/multi-container
+  idRepo: syncfusion
+  reportsRepo: syncfusion
   # Overrides the image tag whose default is the chart appVersion.
-  idTag: 14.1.18
-  reportsTag: 14.1.18
+  idTag: 15.1.10
+  reportsTag: 15.1.10
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 
 versions:
   idp: "5.1.1"
-  reports: "14.1.18"
+  reports: "15.1.10"
 
 loadBalancer:
   type: alb
@@ -140,6 +140,18 @@ instanceConfig:
     memoryResourceRequests: 750Mi
   - app: bold-etl
     product: boldreports
+    replicaCount: 1
+    minReplicas: 1
+    maxReplicas: 20
+    cpuResourceRequests: 250m
+    memoryResourceRequests: 750Mi
+  - app: reports-ai
+    replicaCount: 1
+    minReplicas: 1
+    maxReplicas: 20
+    cpuResourceRequests: 250m
+    memoryResourceRequests: 750Mi
+  - app: reports-mcp
     replicaCount: 1
     minReplicas: 1
     maxReplicas: 20

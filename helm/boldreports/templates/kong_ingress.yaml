@@ -45,6 +45,24 @@ spec:
     {{- end }}
         paths:
 
+          # Reporting AI
+          - path: /reporting/ai
+            pathType: Prefix
+            backend:
+              service:
+                name: reports-ai-service
+                port:
+                  number: 6555
+
+          # Reporting MCP
+          - path: /reporting/mcp
+            pathType: Prefix
+            backend:
+              service:
+                name: reports-mcp-service
+                port:
+                  number: 6556
+
           # Reporting API
           - path: /reporting/api
             pathType: Prefix

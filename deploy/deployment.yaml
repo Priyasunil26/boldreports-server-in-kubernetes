@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: id-web-container
-        image: us-docker.pkg.dev/boldreports/multi-container/bold-identity:14.1.18
+        image: syncfusion/bold-identity:15.1.10
         ports:
         - containerPort: 80
         resources:
@@ -73,7 +73,7 @@ spec:
           name: id-api-volume
       containers:
       - name: id-api-container
-        image: us-docker.pkg.dev/boldreports/multi-container/bold-idp-api:14.1.18
+        image: syncfusion/bold-idp-api:15.1.10
         ports:
         - containerPort: 80
         resources:
@@ -126,7 +126,7 @@ spec:
           name: id-ums-volume
       containers:
       - name: id-ums-container
-        image: us-docker.pkg.dev/boldreports/multi-container/bold-ums:14.1.18
+        image: syncfusion/bold-ums:15.1.10
         ports:
         - containerPort: 80
         resources:
@@ -179,7 +179,7 @@ spec:
           name: reports-web-volume
       containers:
       - name: reports-web-container
-        image: us-docker.pkg.dev/boldreports/multi-container/boldreports-server:14.1.18
+        image: syncfusion/boldreports-server:15.1.10
         ports:
         - containerPort: 80
         resources:
@@ -231,7 +231,7 @@ spec:
           name: reports-api-volume
       containers:
       - name: reports-api-container
-        image: us-docker.pkg.dev/boldreports/multi-container/boldreports-server-api:14.1.18
+        image: syncfusion/boldreports-server-api:15.1.10
         ports:
         - containerPort: 80
         resources:
@@ -283,7 +283,7 @@ spec:
           name: reports-jobs-volume
       containers:
       - name: reports-jobs-container
-        image: us-docker.pkg.dev/boldreports/multi-container/boldreports-server-jobs:14.1.18
+        image: syncfusion/boldreports-server-jobs:15.1.10
         ports:
         - containerPort: 80
         resources:
@@ -335,7 +335,7 @@ spec:
           name: reports-reportservice-volume
       containers:
       - name: reports-reportservice-container
-        image: us-docker.pkg.dev/boldreports/multi-container/boldreports-designer:14.1.18
+        image: syncfusion/boldreports-designer:15.1.10
         ports:
         - containerPort: 80
         resources:
@@ -387,7 +387,7 @@ spec:
           name: reports-viewer-volume
       containers:
       - name: reports-viewer-container
-        image: us-docker.pkg.dev/boldreports/multi-container/boldreports-viewer:14.1.18
+        image: syncfusion/boldreports-viewer:15.1.10
         ports:
         - containerPort: 80
         resources:
@@ -439,7 +439,7 @@ spec:
           name: bold-etl-volume
       containers:
       - name: bold-etl-container
-        image: us-docker.pkg.dev/boldreports/multi-container/bold-etl:14.1.18
+        image: syncfusion/bold-etl:15.1.10
         ports:
         - containerPort: 80
         env:
@@ -463,6 +463,110 @@ spec:
           name: log4net-config-volume
       volumes:
       - name: bold-etl-volume
+        persistentVolumeClaim:
+          claimName: bold-services-fileserver-claim
+          readOnly: false
+      - name: log4net-config-volume
+        configMap:
+          name: log4net-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reports-ai-deployment
+  namespace: bold-services
+spec:
+  selector:
+    matchLabels:
+      app: reports-ai
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: reports-ai
+    spec:
+      initContainers:
+      - name: id-web-initialization
+        image: busybox:1.28
+        command: ["/bin/sh","-c"]
+        args: ["if [ ! -f /application/app_data/configuration/config.xml ]; then echo waiting for id-web; sleep 5; else echo config.xml file exist; fi"]
+        volumeMounts:
+        - mountPath: /application/app_data
+          name: reports-ai-volume
+      containers:
+      - name: reports-ai-container
+        image: syncfusion/boldreports-ai:15.1.10
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+            memory: 750Mi
+        readinessProbe:
+          httpGet:
+            path: /health-check
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        volumeMounts:
+        - mountPath: /application/app_data
+          name: reports-ai-volume
+        - mountPath: /application/reporting/ai/logs
+          name: log4net-config-volume
+      volumes:
+      - name: reports-ai-volume
+        persistentVolumeClaim:
+          claimName: bold-services-fileserver-claim
+          readOnly: false
+      - name: log4net-config-volume
+        configMap:
+          name: log4net-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reports-mcp-deployment
+  namespace: bold-services
+spec:
+  selector:
+    matchLabels:
+      app: reports-mcp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: reports-mcp
+    spec:
+      initContainers:
+      - name: id-web-initialization
+        image: busybox:1.28
+        command: ["/bin/sh","-c"]
+        args: ["if [ ! -f /application/app_data/configuration/config.xml ]; then echo waiting for id-web; sleep 5; else echo config.xml file exist; fi"]
+        volumeMounts:
+        - mountPath: /application/app_data
+          name: reports-mcp-volume
+      containers:
+      - name: reports-mcp-container
+        image: syncfusion/boldreports-mcp-server:15.1.10
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+            memory: 750Mi
+        readinessProbe:
+          httpGet:
+            path: /health-check
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        volumeMounts:
+        - mountPath: /application/app_data
+          name: reports-mcp-volume
+        - mountPath: /application/reporting/mcp/logs
+          name: log4net-config-volume
+      volumes:
+      - name: reports-mcp-volume
         persistentVolumeClaim:
           claimName: bold-services-fileserver-claim
           readOnly: false
